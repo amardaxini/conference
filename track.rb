@@ -18,12 +18,13 @@ class Track
   end
   
   def print_track
-    puts "Track No: #{@track_no} \n"
-    puts "Morning Session \n"
+    puts "Track No: #{@track_no} \n\n"
+    puts "Morning Session \n \n"
     @morning_session.display_events
     
     if @afternoon_session
-       puts "Afternoon Session \n"
+        puts  "\n"  
+       puts "Afternoon Session \n \n"
        @afternoon_session.display_events
     end
     

@@ -19,7 +19,8 @@ class Session
   
   def display_events
     @session_events.each do |session_event|
-      puts session_event.event.name + " : " + session_event.event.duration.to_s + "\n"
+
+      puts session_event.display_start_time + " " + session_event.event.name + " : " + session_event.event.duration.to_s + "\n"
     end
   end
 end

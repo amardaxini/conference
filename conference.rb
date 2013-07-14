@@ -154,7 +154,10 @@ class Conference
   end
   
   def display_tracks
-    @tracks.each {|x| x.print_track}
+    @tracks.each do |x| 
+      x.print_track
+    puts  "\n"  
+    end
   end
   
 end
