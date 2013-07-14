@@ -41,6 +41,7 @@ class Conference
     set_event_schedular_matrix
     set_tracks
     set_sessions
+    display_tracks
   end
   
   def set_conference_parameter
@@ -150,6 +151,10 @@ class Conference
     end  
     
     events
+  end
+  
+  def display_tracks
+    @tracks.each {|x| x.print_track}
   end
   
 end

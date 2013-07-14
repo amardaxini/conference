@@ -17,4 +17,17 @@ class Track
     @afternoon_session = Session.set_session_events(events,780)
   end
   
+  def print_track
+    puts "Track No: #{@track_no} \n"
+    puts "Morning Session \n"
+    @morning_session.display_events
+    
+    if @afternoon_session
+       puts "Afternoon Session \n"
+       @afternoon_session.display_events
+    end
+    
+  end
+  
+
 end
