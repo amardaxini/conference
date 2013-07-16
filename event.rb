@@ -1,4 +1,6 @@
-
+require 'rubygems'
+require 'pry'
+require_relative "./conference_exception"
 class Event
   attr_accessor :name ,:duration
   
@@ -6,17 +8,15 @@ class Event
     @name = name
     @duration = duration
   end
-
-
   
   class << self
   
-    def is_parse_event_correct?(name)
+    def is_valid?(name)
       name.match(/\d*min$|lightning$/).nil? ? false : true
     end
     
-    def add_parse_event(name)
-      if is_parse_event_correct?(name)
+    def add_event(name)
+      if is_valid?(name)
         event_name = name.split(" ")
         duration = event_name.pop
        
@@ -27,7 +27,8 @@ class Event
         end
         Event.new(event_name.join(" "),duration)
       else
-      # Raise error invalid event
+        raise EventException.new('Event should be @name @durationmin or @name lightning')
+        
       end
     end
   end

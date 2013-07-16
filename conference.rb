@@ -11,16 +11,11 @@ class Conference
     @tracks = []
   end
   
-
-  
   def add_event(name)
-    if Event.is_parse_event_correct?(name)
-      @events << Event.add_parse_event(name)
-      print "Event is successfully added"
+    if Event.is_valid?(name)
+      @events << Event.add_event(name)
     else
-      # Raise exeception
-      print "Event is in correct \n"
-      print "Event will be '@eventname @durationmin'"
+      raise EventException.new('Event should be @name @durationmin or @name lightning')  
     end
     
   end
@@ -42,6 +37,7 @@ class Conference
     set_tracks
     set_sessions
     display_tracks
+
   end
   
   def set_conference_parameter
@@ -142,7 +138,6 @@ class Conference
     
     total_events.downto(0).each do |i|
       if(@event_matrix[i][duration] == 1)
-        puts "element #{i} duration #{duration}"
         event = @events[i-1]
         @event_matrix[i].each_with_index { |value, index| @event_matrix[i][index] = 0 }
         duration = duration - event.duration
@@ -154,10 +149,13 @@ class Conference
   end
   
   def display_tracks
+    conference_string =""
     @tracks.each do |x| 
-      x.print_track
-    puts  "\n"  
+      conference_string += x.display_track 
+      conference_string += "\n"
     end
+    puts conference_string
+    conference_string
   end
   
 end
