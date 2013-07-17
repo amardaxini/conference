@@ -5,10 +5,11 @@ require_relative './track'
 class Conference
   attr_accessor :events,:total_conference_time,:total_track_day,:total_session
   attr_accessor :event_duration_matrix,:event_keep_matrix,:event_matrix,:tracks
-  
+  attr_accessor :restart_scheduling_count
   def initialize
     @events = []
     @tracks = []
+    @restart_scheduling_count =  0
   end
   
   def add_event(name)
@@ -127,6 +128,7 @@ class Conference
     total_sessions = @total_session
     remaining_duration = @total_conference_time
     @tracks.each_with_index do |track,index|
+      
       if(remaining_duration >180)
         events = get_events_for_duration(180)
       else
@@ -137,13 +139,19 @@ class Conference
       remaining_duration = remaining_duration - durations
       total_sessions = total_sessions - 1
       if(total_sessions>0)
+        
         if(remaining_duration <= 180*total_sessions)
 
-          events = get_events_for_duration(180)
+          if(remaining_duration <180)
+            events = get_events_for_duration(remaining_duration)
+          else  
+            events = get_events_for_duration(225)
+          end
         else
           no_of_morning_session = total_sessions/2
           no_of_afternoon_session = total_sessions - no_of_morning_session
           unit_extra_time = (remaining_duration - 180*total_sessions)/no_of_afternoon_session
+          
           unit_extra_time = 45 if(unit_extra_time>45)
           events = get_events_for_duration(180+unit_extra_time)
         end  
@@ -152,26 +160,26 @@ class Conference
         remaining_duration = remaining_duration - durations
         total_sessions = total_sessions - 1
       end  
-
+      
     end  
 
   end
   # Identify whole 180 minutes event if possible.
 
-  def set_morning_sessions
+  # def set_morning_sessions
     
-  end
-  # Max 225 minutes of event so starting from 225 minutes
-  def set_afternoon_sessions
-    afternoon_session = @total_session/2
-    @tracks.each do |track|
-      if(afternoon_session > 0)
-        events = get_events_for_duration(225)
-        track.set_afternoon_session(events)
-        afternoon_session = afternoon_session-1
-      end
-    end
-  end
+  # end
+  # # Max 225 minutes of event so starting from 225 minutes
+  # def set_afternoon_sessions
+  #   afternoon_session = @total_session/2
+  #   @tracks.each do |track|
+  #     if(afternoon_session > 0)
+  #       events = get_events_for_duration(225)
+  #       track.set_afternoon_session(events)
+  #       afternoon_session = afternoon_session-1
+  #     end
+  #   end
+  # end
   
   
   # From event matrix it will fetch duration and set 0 
@@ -205,6 +213,34 @@ class Conference
     puts conference_string
     conference_string
   end
+
+  def check_all_event_is_scheduled?
+    total_event_scheduled = 0
+    @tracks.each do |track|
+      total_event_scheduled +=track.get_all_session_events.size
+    end
+    @events.size == total_event_scheduled
+  end
+  private
+    def empty_tracks
+      @tracks.each do |track|
+        track.empty_track
+      end
+    end
+
+    def restart_scheduling
+      unless check_all_event_is_scheduled? 
+        if @restart_scheduling_count < 5
+          empty_tracks
+          @events.shuffle
+          @restart_scheduling_count +=  1
+          puts "Restart #{@restart_scheduling_count}"
+          schedule_events
+        end  
+      end
+    end
+
+
   
 end
 

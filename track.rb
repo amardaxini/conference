@@ -20,11 +20,20 @@ class Track
   
   def display_track
     track_string =  "Track No: #{@track_no} \n\n"
-    track_string+= @morning_session.display_session
+    track_string+= @morning_session.display_session if @morning_session
     if @afternoon_session
       track_string+="\n"
       track_string+= @afternoon_session.display_session
     end
     track_string
+  end
+
+  def empty_track
+    @morning_session = nil
+    @afternoon_session = nil
+  end
+  def get_all_session_events
+
+    [(@morning_session.session_events rescue nil),(@afternoon_session.session_events rescue nil)].flatten.compact.uniq
   end
 end

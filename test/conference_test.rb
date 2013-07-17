@@ -60,7 +60,17 @@ class ConferenceTest  <  Test::Unit::TestCase
 		assert_equal 1,@conference.tracks[0].track_no
 	end
 
-	def test_schedular_matrix
+	def test_event_schedular
+		@conference.schedule_events
+		first_track_morning = @conference.tracks[0].morning_session.session_tracks
+		first_track_afternoon = @conference.tracks[0].afternoon_session.session_tracks
+		assert_equal  4,first_track_morning.size
+		assert_equal "Test event 6 ", first_track_morning[0]
+		assert_equal "Test event 4 ", first_track_morning[1]
+		assert_equal "Test event 3 ", first_track_morning[2]
+		assert_equal "Test event 1 ", first_track_morning[3]
+		assert_equal 2,first_track_afternoon.size
+		assert_equal 2,first_track_afternoon.size
 			
 	end
 

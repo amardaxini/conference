@@ -49,5 +49,15 @@ class TrackTest <  Test::Unit::TestCase
 		expected_string+="Afternoon Session\n\n01:00PM test event 1 : 60\n"+"02:00PM test event 1 : 60\n03:00PM test event 1 : 60\n04:00PM Networking Event \n"
 		assert_equal expected_string,track.display_track		
 	end
+	def test_empty_track
+		track = Track.new(1)
+		event1 = Event.add_event("test event 1 60min")
+		event2 = Event.add_event("test event 1 60min")
+		track.set_morning_session([event1])
+		track.set_afternoon_session([event2])
+		track.empty_track
+		assert_equal nil, track.morning_session
+		assert_equal nil, track.afternoon_session
+	end
 end
 
