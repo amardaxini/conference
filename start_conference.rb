@@ -23,10 +23,12 @@ events = [
 conference = Conference.new  
 events.each do |event|
   conference.add_event(event)
-end  
+end 
 
-# conference.display_events
-# conference.schedule_events
+ # conference.display_events
+ conference.schedule_events
+ # conference.display_tracks
+ # puts conference.events.size == conference.event_schedules.size
 # puts conference.total_conference_time
   conference_1 = Conference.new
   conference_1.add_event("Test event 1 22min")
@@ -48,8 +50,9 @@ end
 
   # conference_1.display_events
 
-  # conference_1.schedule_events
-  
+  conference_1.schedule_events
+  # conference_1.display_tracks
+  # puts conference_1.events.size == conference_1.event_schedules.size
   # puts conference_1.total_conference_time
   # afternoon_events = []
   # morning_events =[]
@@ -66,7 +69,9 @@ conference2.add_event("Test event 4 60min")
 conference2.add_event("Test event 5 45min")
 conference2.add_event("Test event 6 40min")
 # conference2.display_events
-# conference2.schedule_events
+conference2.schedule_events
+# conference2.display_tracks
+# puts conference2.events.size == conference2.event_schedules.size
 conference3 = Conference.new
 
 conference3.add_event("Test event 1 23min")
@@ -83,8 +88,9 @@ conference3.add_event("Test event 11 185min")
 conference3.add_event("Test event 12 90min")
 # conference3.add_event("Test event 13 110min")
 # conference3.display_events
-# conference3.schedule_events
+conference3.schedule_events
 # conference3.display_tracks
+# puts conference3.events.size == conference3.event_schedules.size
 
 conference4 = Conference.new
 conference4.add_event("Test event 1 60min")
@@ -98,4 +104,5 @@ conference4.add_event("Test event 8 60min")
 conference4.add_event("Test event 9 60min")
 conference4.add_event("Test event 10 20min")
 conference4.schedule_events
-conference4.display_tracks
+# puts conference4.events.size == conference4.event_schedules.size
+# conference4.display_tracks

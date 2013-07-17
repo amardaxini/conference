@@ -5,12 +5,12 @@ require_relative './event_schedular'
 require_relative './track'
 class Conference
   attr_accessor :events,:total_conference_time,:total_track_day,:total_session
-  attr_accessor :schedule_events,:tracks
+  attr_accessor :event_schedules,:tracks
   attr_accessor :restart_scheduling_count
   def initialize
     @events = []
     @tracks = []
-    @schedule_events = []
+    @event_schedules = []
     @restart_scheduling_count =  0
   end
   
@@ -38,8 +38,6 @@ class Conference
     set_conference_parameter
     set_tracks
     set_sessions
-    display_tracks
-
   end
   
   def set_conference_parameter
@@ -71,7 +69,7 @@ class Conference
 
   def get_events_for_duration(duration=180)
     event_schedular = EventSchedular.new
-    remaining_events = @events - @schedule_events
+    remaining_events = @events - @event_schedules
     event_schedular.add_events(remaining_events)
     event_schedular.schedule_events
     event_schedular.get_events_for_duration(duration)
@@ -81,16 +79,16 @@ class Conference
     @tracks.each_with_index do |track,index|
       events = get_events_for_duration(180)
       track.set_morning_session(events)
-      @schedule_events +=events
+      @event_schedules +=events
       events = get_events_for_duration(225)
       if(!events.empty?)
-        @schedule_events +=events
+        @event_schedules +=events
         track.set_afternoon_session(events)
       end  
-      @schedule_events.flatten.compact
+      @event_schedules.flatten.compact
     end
   end
-  
+
   # Identify First 180 i.e first morning session
   # then find out remaining duration decrease total session by1
   # Now if remaining duration is  less than equal 180*total session
