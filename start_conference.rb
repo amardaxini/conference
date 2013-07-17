@@ -73,15 +73,29 @@ conference3.add_event("Test event 1 23min")
 conference3.add_event("Test event 2 30min")
 conference3.add_event("Test event 3 20min")
 conference3.add_event("Test event 4 25min")
-conference3.add_event("Test event 5 35min")
+conference3.add_event("Test event 5 36min")
 conference3.add_event("Test event 6 85min")
 conference3.add_event("Test event 7 73min")
 conference3.add_event("Test event 8 13min")
 conference3.add_event("Test event 9 31min")
 conference3.add_event("Test event 10 19min")
-conference3.add_event("Test event 11 175min")
+conference3.add_event("Test event 11 185min")
 conference3.add_event("Test event 12 90min")
-conference3.add_event("Test event 13 110min")
+# conference3.add_event("Test event 13 110min")
 # conference3.display_events
-conference3.schedule_events
-conference3.display_tracks
+# conference3.schedule_events
+# conference3.display_tracks
+
+conference4 = Conference.new
+conference4.add_event("Test event 1 60min")
+conference4.add_event("Test event 2 40min")
+conference4.add_event("Test event 3 20min")
+conference4.add_event("Test event 4 60min")
+conference4.add_event("Test event 5 45min")
+conference4.add_event("Test event 6 40min")
+conference4.add_event("Test event 7 60min")
+conference4.add_event("Test event 8 60min")
+conference4.add_event("Test event 9 60min")
+conference4.add_event("Test event 10 20min")
+conference4.schedule_events
+conference4.display_tracks
