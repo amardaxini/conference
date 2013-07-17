@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'pry'
-require './event'
-require './track'
+require_relative './event'
+require_relative './track'
 class Conference
   attr_accessor :events,:total_conference_time,:total_track_day,:total_session
   attr_accessor :event_duration_matrix,:event_keep_matrix,:event_matrix,:tracks
@@ -20,7 +20,7 @@ class Conference
     
   end
   
-  def get_events
+  def display_events
 
     @events.each_with_index do |event,i|
       puts "#{i+1}. #{event.name} : #{event.duration}"
@@ -46,27 +46,33 @@ class Conference
     @total_session = @total_conference_time/180
     @total_session = @total_session+1 if(@total_conference_time < 360)
     
-    @total_track_day =  (@total_session/2.0).ceil
+    
     total_track_time_remain_time =  @total_conference_time-@total_session*180
     # Taking 90 min buffer for  it means for atleast 45 minute for each after noon session
     # IF it's 90 then 15 min networking event for each track
-    
-    if(total_track_time_remain_time>=90)
-		  @total_track_day = @total_track_day+1
+    if(total_track_time_remain_time>45*(@total_session/2))
       @total_session = @total_session+1
 	  end
+    @total_track_day =  (@total_session/2.0).ceil
   end
   
   def set_total_confernce_time
     @total_conference_time =  @events.map(&:duration).inject{|sum,x| sum + x }
   end
 
+  def total_afternoon_session
+    @total_session/2
+  end
+  def total_morning_session
+    @total_session/2+1
+  end
 
   # in event_keep_matrix row will be the no of event
   # column will be the duration
   def set_event_schedular_matrix
     max_duration = 225
     durations = @events.collect(&:duration)
+    
     duration_significance = durations.each {|x|x/durations.size }
     @event_duration_matrix = [].tap { |m| (total_events+1).times { m << Array.new(max_duration+1) } }
     @event_duration_matrix[0].each_with_index { |value, index| @event_duration_matrix[0][index] = 0 }
@@ -106,20 +112,56 @@ class Conference
       @tracks << Track.new(i)
     end
   end  
-  
+  # Identify First 180 i.e first morning session
+  # then find out remaining duration decrease total session by1
+  # Now if remaining duration is  less than equal 180*total session
+  # then find out nearer 180 event duration
+  # else find out remaining morning session*180 and subtract from remaining duration
+  # get remaining no of after noon session divide by them with remaining duration so
+  # We will get extra time and we try to divide in equal timing so probably we get equal
+  # Networking event
+  # Some times event is big so if unit extra time is more than 45 than set to 45
+  # TODO Or we can have first track has max conference
   def set_sessions
-    set_morning_sessions
-    set_afternoon_sessions
-  end
-  def set_morning_sessions
-    @tracks.each do |track|
-      events = get_events_for_duration(180)
-  
+
+    total_sessions = @total_session
+    remaining_duration = @total_conference_time
+    @tracks.each_with_index do |track,index|
+      if(remaining_duration >180)
+        events = get_events_for_duration(180)
+      else
+        events = get_events_for_duration(remaining_duration)
+      end  
       track.set_morning_session(events)
+      durations = events.inject(0) {|sum,x| sum+x.duration}
+      remaining_duration = remaining_duration - durations
+      total_sessions = total_sessions - 1
+      if(total_sessions>0)
+        if(remaining_duration <= 180*total_sessions)
+
+          events = get_events_for_duration(180)
+        else
+          no_of_morning_session = total_sessions/2
+          no_of_afternoon_session = total_sessions - no_of_morning_session
+          unit_extra_time = (remaining_duration - 180*total_sessions)/no_of_afternoon_session
+          unit_extra_time = 45 if(unit_extra_time>45)
+          events = get_events_for_duration(180+unit_extra_time)
+        end  
+        track.set_afternoon_session(events)
+        durations = events.inject(0) {|sum,x| sum+x.duration}
+        remaining_duration = remaining_duration - durations
+        total_sessions = total_sessions - 1
+      end  
+
     end  
 
   end
-  
+  # Identify whole 180 minutes event if possible.
+
+  def set_morning_sessions
+    
+  end
+  # Max 225 minutes of event so starting from 225 minutes
   def set_afternoon_sessions
     afternoon_session = @total_session/2
     @tracks.each do |track|
@@ -132,10 +174,16 @@ class Conference
   end
   
   
-  # From event matrix it will fetch duration and set 0 so same ec=vent can't be repeated
+  # From event matrix it will fetch duration and set 0 
+  # so same event can't be repeated
+  # It will start from last event and check for duration
+  # Suppose Searching for 180 total event is 20
+  # Last event is wworth of 30 min now
+  # next event will be 19 and it will try to search on 180-30=150 
+  # if it's 1 then add it other wise go to next event i.e 18
   def get_events_for_duration(duration)
     events = []
-    
+   
     total_events.downto(0).each do |i|
       if(@event_matrix[i][duration] == 1)
         event = @events[i-1]

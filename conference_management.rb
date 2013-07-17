@@ -16,7 +16,7 @@ begin
     conference.add_event(name)
     
   elsif(choice==2)
-    conference.get_events
+    conference.display_events
     
   
   elsif(choice==3)

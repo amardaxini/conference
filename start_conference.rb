@@ -24,6 +24,36 @@ conference = Conference.new
 events.each do |event|
   conference.add_event(event)
 end  
-conference.get_events
+
+conference.display_events
 conference.schedule_events
-binding.pry
+puts conference.total_conference_time
+  @conference = Conference.new
+  @conference.add_event("Test event 1 22min")
+  @conference.add_event("Test event 2 40min")
+  @conference.add_event("Test event 3 20min")
+  @conference.add_event("Test event 4 60min")
+  @conference.add_event("Test event 5 45min")
+  @conference.add_event("Test event 6 50min")
+  @conference.add_event("Test event 7 20min")
+  @conference.add_event("Test event 8 20min")
+  @conference.add_event("Test event 9 22min")
+  @conference.add_event("Test event 10 22min")
+  @conference.add_event("Test event 11 119min")
+  @conference.add_event("Test event 12 11min")
+  @conference.add_event("Test event 13 70min")
+  @conference.add_event("Test event 14 45min")
+  @conference.add_event("Test event 15 35min")
+  @conference.add_event("Test event 16 89min")
+
+  # @conference.display_events
+
+  # @conference.schedule_events
+  
+  # puts @conference.total_conference_time
+  # afternoon_events = []
+  # morning_events =[]
+  # @conference.tracks.each {|x|x.morning_session.session_events.collect{|x| morning_events.push(x.event)}}
+  # @conference.tracks.each {|x|x.afternoon_session.session_events.collect{|x| afternoon_events.push(x.event)} rescue []}
+  # puts @conference.events - morning_events.flatten - afternoon_events.flatten
+  # binding.pry
