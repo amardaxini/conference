@@ -90,6 +90,54 @@ class Conference
       @schedule_events.flatten.compact
     end
   end
+  
+  # Identify First 180 i.e first morning session
+  # then find out remaining duration decrease total session by1
+  # Now if remaining duration is  less than equal 180*total session
+  # then find out nearer 180 event duration
+  # else find out remaining morning session*180 and subtract from remaining duration
+  # get remaining no of after noon session divide by them with remaining duration so
+  # We will get extra time and we try to divide in equal timing so probably we get equal
+  # Networking event
+  # Some times event is big so if unit extra time is more than 45 than set to 45
+  # TODO Or we can have first track has max conference
+  # def old_set_sessions
+  #   total_sessions = @total_session
+  #   remaining_duration = @total_conference_time
+  #   @tracks.each_with_index do |track,index|
+  #     if(remaining_duration >180)
+  #       events = get_events_for_duration(180)
+  #     else
+  #       events = get_events_for_duration(remaining_duration)
+  #     end 
+  #     track.set_morning_session(events)
+  #     durations = events.inject(0) {|sum,x| sum+x.duration}
+  #     remaining_duration = remaining_duration - durations
+  #     total_sessions = total_sessions - 1
+  #     if(total_sessions>0)
+        
+  #       if(remaining_duration <= 180*total_sessions)
+
+  #         if(remaining_duration <180)
+  #           events = get_events_for_duration(remaining_duration)
+  #         else  
+  #           events = get_events_for_duration(225)
+  #         end
+  #       else
+  #         no_of_morning_session = total_sessions/2
+  #         no_of_afternoon_session = total_sessions - no_of_morning_session
+  #         unit_extra_time = (remaining_duration - 180*total_sessions)/no_of_afternoon_session
+          
+  #         unit_extra_time = 45 if(unit_extra_time>45)
+  #         events = get_events_for_duration(180+unit_extra_time)
+  #       end  
+  #       track.set_afternoon_session(events)
+  #       durations = events.inject(0) {|sum,x| sum+x.duration}
+  #       remaining_duration = remaining_duration - durations
+  #       total_sessions = total_sessions - 1
+  #     end  
+  #   end
+  # end
 
   
   def display_tracks
